@@ -63,7 +63,6 @@ while cap.isOpened():
                 data_list.extend(["Left", 0, 0, 0])
 
         data = " ".join(map(str,data_list))
-        # print(data)
         send_data(data)
 
     cv2.imshow("Hand Tracking", frame)

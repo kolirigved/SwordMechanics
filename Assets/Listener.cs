@@ -34,7 +34,6 @@ public class Listener : MonoBehaviour
                 {
                     byte[] receivedBytes = udpServer.Receive(ref remoteEndPoint); 
                     string dataReceived = Encoding.UTF8.GetString(receivedBytes);
-                    Debug.Log("Received data: " + dataReceived);
                     ParseData(dataReceived);
                 }
 

@@ -9,10 +9,6 @@ def send_data(data,host = "127.0.0.1", port=25001):
         sock.sendto(data.encode("utf-8"),(host,port))
     except Exception as e:
         print(f"Error: {e}")
-def get_angle(a, b):
-    angle=np.degrees(np.arctan2((b.y-a.y),b.x-a.x))
-    return angle
-
 
 def get_angle(a, b): #function to calculate angle between two points
     angle = np.degrees(np.arctan2((-b.y + a.y), b.x - a.x))
@@ -63,7 +59,7 @@ while cap.isOpened():
                 data_list.extend(["Left", 0, 0, 0])
 
         data = " ".join(map(str,data_list))
-        # print(data)
+        #print(data)
         send_data(data)
 
     cv2.imshow("Hand Tracking", frame)
@@ -72,5 +68,3 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
-            
-            

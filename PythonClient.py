@@ -3,6 +3,31 @@ import mediapipe as mp
 import numpy as np
 import socket
 
+import threading
+
+def receive_data(host = "127.0.0.1", port=25002):
+    global quitsignal
+    quitsignal = False
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind((host, port))
+        print(f"Listening for data on {host}:{port}...")
+        while True:
+            data, _ = sock.recvfrom(1024)  # Buffer size of 1024 bytes
+            message = data.decode("utf-8").strip()
+            print(f"Received data: {message}")
+
+            if message == "q":
+                print("Received 'q'. Exiting...")
+                quitsignal = True
+                sock.close()                
+                exit(0)  # Terminate the program if "q" is received
+    except Exception as e:
+        print(f"Receive Error: {e}")
+
+receive_thread = threading.Thread(target=receive_data, daemon=True)
+receive_thread.start()
+
 def send_data(data,host = "127.0.0.1", port=25001):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -68,6 +93,9 @@ while cap.isOpened():
 
     cv2.imshow("Hand Tracking", frame)
     if cv2.waitKey(5) & 0xFF == ord('q'):
+        break
+
+    if quitsignal:
         break
 
 cap.release()
